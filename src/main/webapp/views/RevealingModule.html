@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Revealing Module</title>
+</head>
+<body>
+	<script type="text/javascript">
+	
+	/* 模块模式 */
+	var myModule = function(){
+		var privateVar = "Ban Cherry";
+		
+		function privateFunction(){
+			console.log("Name:" + privateVar);
+		}
+		
+		// 定义公有对象与变量
+		return {
+			setName: function(strName){
+				privateVar = strName;
+				myModule.getName();		// 访问公有方法必须主对象名称
+			},
+			publicVar: "Hey there!",
+			getName: function(){
+				privateFunction();
+			}
+		}
+	}();
+	
+	myModule.setName("module");
+	
+		
+	/* 揭示模块模式 */
+	var myRevealingModule = function(){
+		var privateVar = "Ban Cherry", publicVar = "Hey there!";
+		
+		function privateFunction(){
+			console.log("Name:" + privateVar);
+		}
+		
+		function publicSetName(strName){
+			privateVar = strName;
+			publicGetName();	// 同一个函数内可以直接访问
+		}
+		
+		function publicGetName(){
+			privateFunction();
+		}
+		
+		// 将暴露的公用指针指向到私有函数和属性上
+		return {
+			setName: publicSetName,
+			greeting: publicVar,
+			getName: publicGetName
+		}
+		
+	}();
+	
+	myRevealingModule.setName("reval module");
+	
+
+	
+	/* 测试打补丁 */
+	myRevealingModule.getName = function(){
+		console.log("已覆盖");
+	}
+	
+	// 引用未修改
+	myRevealingModule.setName("reval module2");
+	
+	// 仍然输出：Name:reval module2
+
+	</script>
+</body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>单例模式</title>
+</head>
+<body>
+	<h2>单例模式</h2>
+	<p>限制类的实例化次数</p>
+	<p>不同于静态类或对象，推迟它们的初始化，因为有些信息在初始化期间可能无法获得</p>
+	<p>当类只能有一个实例而且客户从一个总所周知的访问点访问它时</p>
+	<p>使用情况：系统中的模块紧密耦合，或者逻辑分散在代码库的多个部分</p>
+	<p>但是测试会更加困难</p>
+	
+	<script>
+	// 1
+	var mySingleton = (function (){
+		// 实例的引用
+		var instance;
+		function init(){
+			// 创建实例
+			console.log("实例被创建了");
+			function privateMethod(){
+				console.log("I am private");
+			}
+			var privateVariable = "Im also private";
+			var privateRandomNumber = Math.random();
+			return {
+				publicMethod: function (){
+					console.log("The public can see me!");
+				},
+				publicProperty: "I am also public",
+				getRandomNumber: function (){
+					return privateRandomNumber;
+				}
+			};
+		};
+		
+		return {
+			// 获取实例，存在返回，不存在创建
+			getInstance: function (){
+				if(!instance){
+					instance = init();
+				}
+				return instance;
+			}
+		}
+	})();
+	
+	var singleA = mySingleton.getInstance();
+	var singleB = mySingleton.getInstance();
+	console.log(singleA.getRandomNumber() === singleB.getRandomNumber());	// true
+	
+	//  2
+	var SingletonTester = (function (){
+		// options：包含singleton所需配置信息的对象
+		function Singleton(options){
+			// 如果未提供options，则设置空对象
+			options = options || {};
+			
+			this.name = "SingletonTester";
+			this.ponitX = options.pointX || 6;
+			this.pointY = options.pointY || 10;
+			
+		}
+		
+		// 实例持有者
+		var instance;
+		
+		var _static = {
+			name: "SingletonTester",
+			// 获取实例的方法
+			getInstance: function(options){
+				if(instance === undefined){
+					instance = new Singleton(options);
+				}
+				return instance;
+			}
+		};
+		return _static;
+	})();
+	
+	var singletonTest = SingletonTester.getInstance({pointX: 5});
+	console.log(singletonTest.ponitX);
+	</script>
+</body>
+</html>

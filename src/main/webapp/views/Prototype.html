@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Prototype（原型）模式</title>
+<script type="text/javascript" src="function/inhert.js"></script>
+</head>
+<body>
+	<h2>Prototype（原型）模式</h2>
+	<p>在一个对象中定义一个函数，它们都是由引用创建，而不是创建它们自己的单独拷贝</p>
+	
+	<script type="text/javascript">
+	
+	var myCar = {
+			name: "Ford Escort",
+			drive: function (){
+				console.log("I'm driving!");
+			}			
+	}
+	
+	// 使用继承创建一个新实例
+	var yourCar = inherit(myCar);
+	var hisCar = inherit(myCar);
+	
+	// 现在可以看到一个对象是另一个对象的原型
+	console.log("myCar = " + myCar.name);
+	console.log("yourCar = " + yourCar.name);
+	console.log("hisCar" + hisCar.name);
+	
+	// 修改了新实例的属性实际上是修改了自身的属性，原型不会修改，其它引用对象不会修改
+	yourCar.name = "yourCar";
+	console.log("myCar = " + myCar.name);
+	console.log("yourCar = " + yourCar.name);
+	console.log("hisCar = " + hisCar.name);
+	
+	// 另一方面，如果修改了原型，所有引用都会修改
+	myCar.name = " Ford Escort New !";
+	console.log("myCar = " + myCar.name);
+	console.log("yourCar = " + yourCar.name);
+	console.log("hisCar = " + hisCar.name);
+	
+	</script>
+</body>
+</html>

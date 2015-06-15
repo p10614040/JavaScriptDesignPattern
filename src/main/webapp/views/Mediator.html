@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Media（中介者）模式</title>
+<script type="text/javascript" src="js/jquery.js"></script>
+</head>
+<body>
+	
+	<h2>Media（中介者）模式</h2>
+	
+	<p>行为设计模式。公开一个统一的接口，系统的不同部分可以通过该接口进行通信。</p>
+	<p>确保组件的交互是通过这个中心点来处理，而不是通过显示地引用彼此。</p>
+	<p>这种模式可以帮助我们解耦系统并提高组件的可重用性</p>
+	
+	<hr>
+	
+	<script>
+	// 1 基本实现
+	
+	var mediator = (function (){
+		
+		// 存储可被广播或监听的topic
+		var topics = {};
+		
+		// 订阅一个topic，提供一个回调函数，一旦topic被广播就执行该回调
+		var subscribe = function (topic, fn){
+			
+			if(!topics[topic]){
+				topics[topic] = [];
+			}
+			topics[topic].push({context: this, callback: fn});
+			
+			return this;
+		};
+		
+		// 发布/广播事件到程序的剩余部分
+		var publish = function (topic){
+			
+			var args;
+			
+			if(!topics[topic]){
+				return false;
+			}
+			// call 和 apply 方法都是用来调用“不属于自身的方法”，apply第二参数必须是数组
+			// 下面的代码相当于 arguments.slice，但是arguments本身没有 slice方法
+			// slice 方法是用来截取数组
+			// arguments 是实参“数组”
+			args = Array.prototype.slice.call(arguments, 1);
+			for(var i = 0, l = topics[topic].length; i < l; i++){
+				
+				var subscription = topics[topic][i];
+				subscription.callback.apply(subscription.context, args);
+				// subscription.callback(arguments[1]);
+			}
+			return this;
+		};
+		
+		return {
+			publish: publish,
+			subscribe: subscribe,
+			installTo: function (obj){
+				obj.subscribe = subscribe;
+				obj.publish = publish;
+			}
+		}
+	})();
+	
+	</script>
+	
+	<h3>简单实现</h3>
+	<form id="chatForm">
+		<label for="fromBox">Your Name:</label>
+		<input id="fromBox" type="text">
+		<br>
+		<label for="toBox">Send to:</label>
+		<input id="toBox" type="text">
+		<br>
+		<label for="chatBox">Message:</label>
+		<input id="chatBox" type="text">
+		<button action="submit">Chat</button>
+	</form>
+	
+	<div id="chatResult"></div>
+	
+	<script type="text/javascript">
+	$("#chatForm").on("submit", function (e){
+		e.preventDefault();
+		
+		// 从UI上获取chat的数据
+		var text = $("#chatBox").val(),
+			from = $("#fromBox").val(),
+			to = $("#toBox").val();
+		
+		// 将数据发布到newMessage主题上
+		mediator.publish("newMessage", {message: text, from: from, to: to});
+	});
+	
+	// 将新信息附加到聊天记录结果上
+	function displayChat(data){
+		var date = new Date(),
+			msg = data.from + " said \""+data.message+"\" to "+ data.to;
+		
+		$("#chatResult").prepend(""+msg+" ("+date.toLocaleTimeString()+")");
+	}
+	
+	// 记录消息日志
+	function logChat(data){
+		if(window.console){
+			console.log(data);
+		}
+	}
+	
+	// 通过mediator订阅提交的newMessage主题
+	mediator.subscribe("newMessage", displayChat);
+	mediator.subscribe("newMessage", logChat);
+	</script>
+</body>
+</html>

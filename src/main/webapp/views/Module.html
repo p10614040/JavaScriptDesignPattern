@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Module 模式</title>
+<script type="text/javascript" src="js/jquery.js"></script>
+</head>
+<body>
+
+<div class="container"></div>
+
+	<script>
+		//对象直接量
+		var object_a = {
+			date : "2015-04-21",
+			sayHello : function() {
+				console.log("Hello!");
+			},
+			author : {
+				age : 27,
+				name : "zhangsan"
+			}
+		}
+		object_a.sayHello();
+		console.log(object_a.author.name);
+		
+		
+		// 函数
+		console.log(f1(1));				// 输出2
+		// console.log(f2(1));				// 提示 f2 undefind 
+		
+		function f1(x){return x+1;}		// 函数声明表达式
+		var f2 = function(x){return x+1};// 函数定义表达式
+		
+		if(true){
+			function f3(x){return x+1;}		// 函数声明表达式
+			var f4 = function(x){return x+1};// 函数定义表达式
+		}
+		
+		
+		// 计数器
+		var testModule = (function(){		// testModule 相当于对象的命名空间，所有方法必须带上这个前缀
+			var counter = 0;	// counter 只有对象内部的函数可以访问，像是一个私有变量
+			return {
+				increment: function(){		// 代码无法直接读取此方法
+					return ++counter;
+				},
+				resetCounter: function(){
+					console.log("计数器已经重置为0");
+					counter = 0;
+				},
+				title: '测试Module'
+			}		// 返回一个对象直接量创建的对象
+		})();
+		
+		// 计数器增加
+		console.log(testModule.increment());
+		// 计数器重置
+		testModule.resetCounter();
+		
+		
+		
+		
+		/* Module 模式引入混入 */
+		var module2 = "引入混入";
+		var myModule = (function(jQ){
+			var $ = "";		// 模块内变量与全局变量冲突
+			var module2 = "test";
+			
+			function privateMethod(){
+				jQ(".container").html("test");
+			}
+			
+			return {
+				publicMethod: function(){
+					privateMethod();
+				}
+			}
+		})($);
+		
+		myModule.publicMethod();
+		console.log(module2);
+		
+		
+		/* Module 模式引出  */
+		(function(){
+			// 模块对象
+			var moduleDraw = {};
+			var privateVarible = "i am private varible.";
+			function prvateMethod(){
+				console.log(privateVarible);
+			}
+			
+			moduleDraw.publicVarible = privateVarible;
+			moduleDraw.publicMethod = prvateMethod;
+			
+			// 定义全局变量
+			window.myModule2 = moduleDraw;
+		})();
+		
+		myModule2.publicMethod();
+	</script>
+</body>
+</html>

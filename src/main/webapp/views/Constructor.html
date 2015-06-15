@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Constructor（构造器）模式</title>
+</head>
+
+<body>
+
+
+	<script>
+		// 创建一个空对象
+		var blankObject = {};
+		console.log("---------------------------Number 1---------------------------");
+		
+		/* 
+		 * 一、使用Object构造器创建一个空对象
+		 */
+		var blankObject = new Object();
+		// 与上面的代码是等价的
+		// var blankObject = new Object; 
+
+		// 设置属性的两种常用方式，也是通用方式
+		blankObject.keyA = "ValueA";
+		blankObject["keyB"] = "ValueB";
+
+		// 打开浏览器控制台查看日志
+		console.log(blankObject.keyA);
+		console.log(blankObject.keyB);
+
+		console
+				.log("---------------------------Number 2---------------------------");
+		/*
+		 * 二、简单的构造器模式
+		 */
+		function SimplePeople(name, age, height) {
+			this.name = name; // this指向新对象
+			this.age = age;
+			this.height = height;
+
+			this.toString = function() {
+				return "name : " + this.name + ",age : " + this.age
+						+ ",height : " + this.height + ".";
+			}
+		}
+
+		// 使用关键字new ，构成构造函数调用
+		var mack = new SimplePeople("Mack", 20, 170);
+		var jack = new SimplePeople("Jack", 21, 175);
+
+		console.log(mack.toString());
+		console.log(jack.toString());
+
+		console
+				.log("---------------------------Number 3---------------------------");
+		/*
+		 * 三、带原型（prototype）的构造器模式
+		 */
+		function PrototypePeople(name, age, height) {
+			this.name = name;
+			this.age = age;
+			this.height = height;
+		}
+		// 原型增加一个方法共享
+		PrototypePeople.prototype.toString = function() {
+			return "name : " + this.name + ",age : " + this.age + ",height : "
+					+ this.height + ".";
+		}
+		// 或者重新定义一个原型对象
+		/*PrototypePeople.prototype = {
+			toString : function(){
+			    return "name : " + this.name + ",age : " + this.age + ",height : " + this.height + "."
+			}
+		}*/
+		// 每个新对象都会继承prototype属性
+		var zhangsan = new PrototypePeople("ZhangSan", 22, 180);
+		var lisi = new PrototypePeople("LiSi", 19, 170);
+
+		console.log(zhangsan.toString());
+		console.log(lisi.toString());
+	</script>
+
+</body>
+</html>

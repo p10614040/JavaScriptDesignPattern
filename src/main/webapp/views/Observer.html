@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Observer（观察者）模式</title>
+</head>
+<body>
+	
+	<p>观察者模式演示，选中所有复选框</p>
+	<button id="addNewObserver">Add new Observer checkbox</button>
+	<input id="mainChcekbox" type="checkbox">
+	<div id="observersConstainer"></div>
+	
+	<h2>Observer（观察者）模式</h2>
+	<p>一个对象（subject）维持一系列依赖于它（观察者）的对象，
+	将有关状态的任何变更自动通知它们</p>
+	<p>当我们不再希望某个特定的观察者获得其注册目标发出的改变通知时，
+	该目标可以将它从观察者列表中删除。</p>
+	<ul>
+		<li><strong>Subject（目标）</strong>
+			<p>维护一系列的观察者，方便添加或删除观察者</p></li>
+		<li><strong>Observer（观察者）</strong>
+			<p>为那些在目标状态发生改变时需获得通知的对象提供一个更新接口</p></li>
+		<li><strong>ConcreteSubject（具体目标）</strong>
+			<p>状态发生改变时，向Observer发出通知，储存ConcreteObserver的状态</p></li>
+		<li><strong>ConcreteObserver（具体观察者）</strong>
+			<p>存储一个指向ConcreteSubject的引用，实现Observer的更新接口，
+			以使自身状态与目标的状态保持一致</p></li>
+	</ul>
+	<p>观察者模式的主要作用是解耦，改进代码管理和潜在的复用</p>
+	<script type="text/javascript">
+	
+	// 观察者数组
+	function ObserverList(){
+		this.observerList = [];
+	}
+	
+	// 原型方法
+	ObserverList.prototype.Add = function(obj){
+		return this.observerList.push(obj);
+	}
+	
+	ObserverList.prototype.Empty = function(){
+		this.observerList = [];
+	}
+	
+	ObserverList.prototype.Count = function(){
+		return this.observerList.length;
+	}
+	
+	ObserverList.prototype.Get = function (index){
+		if(index > -1 && index < this.observerList.length){
+			return this.observerList[index];
+		}
+	}
+	
+	ObserverList.prototype.Insert = function (obj, index){
+		var pointer = -1;
+		
+		if(index === 0){
+			this.observerList.unshift(obj);
+			pointer = index;
+		}else if(index === this.observerList.length){
+			this.observerList.push(obj);
+			pointer = index;
+		}
+		return pointer;
+	}
+	
+	ObserverList.prototype.IndexOf = function (Obj, startIndex){
+		var i = startIndex || 0, pointer = -1;
+		
+		while (i < this.observerList.length){
+			if(this.observerList[i] === obj){
+				pointer = i;
+			}
+			i++
+		}
+		return pointer;
+	}
+	
+	ObserverList.prototype.RemoveIndexAt = function (index){
+		if(index === 0){
+			this.observerList.shift();
+		}else if(index === this.observerList.length - 1){
+			this.observerList.pop();
+		}else{
+			this.observerList.splice(index, 0);
+		}
+	}
+	
+	// extension 实例扩展
+	function extend(obj, extension){
+		for(var key in obj){
+			extension[key] = obj[key];
+		}
+	}
+	
+	// 目标（被观察者）
+	function Subject(){
+		this.observers = new ObserverList();
+	}
+	
+	Subject.prototype.AddObserver = function (observer){
+		this.observers.Add(observer);
+	}
+	
+	Subject.prototype.RemoveObserver = function (observer){
+		this.observers.RemoveIndexAt(this.observers.IndexOf(observer, 0));
+	}
+	// 通知所有的 Observer 执行 Update
+	Subject.prototype.Notify = function (context){
+		var observerCount = this.observers.Count();
+		for(var i = 0; i < observerCount; i++){
+			this.observers.Get(i).Update(context);
+		}
+	}
+	
+	
+	// 新的Observer
+	function Observer(){
+		this.Update = function (){
+			// 这里的Update函数会被具体的行为覆盖
+		}
+	}
+	
+	// 引用DOM
+	var controlChcekbox = document.getElementById("mainChcekbox"),
+		addBtn = document.getElementById("addNewObserver"),
+		container = document.getElementById("observersConstainer");
+	
+	// 具体目标 Concrete Subject
+	
+	// 利用 Subject 扩展 controlChcekbox
+	extend(new Subject(), controlChcekbox);
+	
+	// 点击 checkbox 通知观察者
+	controlChcekbox["onclick"] = function (){
+		controlChcekbox.Notify(controlChcekbox.checked)
+	};
+	
+	addBtn["onclick"] = AddNewObserver;
+	
+	// 具体观察者 Concrete Observer
+	function AddNewObserver(){
+		// 创建需要添加的新 checkbox
+		var check = document.createElement("input");
+		check.type = "checkbox";
+		
+		// 利用 Observer 类扩展checkbox
+		extend(new Observer(), check);
+		
+		// 重写自定义更新行为
+		check.Update = function (value){
+			this.checked = value;
+		}
+		
+		// 为主 subject 的观察者列表添加新的观察者
+		controlChcekbox.AddObserver(check);
+		
+		// 为观察者附件到容器上
+		container.appendChild(check);
+	}
+	</script>
+	
+	
+</body>
+</html>

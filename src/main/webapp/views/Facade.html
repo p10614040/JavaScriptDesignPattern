@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Facade（外观）模式</title>
+</head>
+<body>
+
+
+	<h2>Facade（外观）模式</h2>
+	<p>外观模式为更大的代码体提供了一个方便的高层次接口，能够隐藏其底层的真实复杂性。
+	可以把它想成是简化API来展示给其他开发人员，通常都是可以提高的可用性。</p>
+
+
+	<input type="button" value="Click" id="but">
+	
+	<script type="text/javascript">
+	
+		var tip = "";
+	
+		// 事件外观函数
+		var addMyEvent = function(el, ev, fn) {
+
+			if (el.addEventListener) {
+				el.addEventListener(ev, fn, false);
+				tip = "addEventListener";
+			} else if (el.attachEvent) {
+				el.attachEvent("on" + ev, fn);
+				tip = "attachEvent":
+			} else {
+				el["on" + ev] = fn;
+				tip = "other";
+			}
+
+		};
+		
+		
+		// 不同浏览器测试
+		addMyEvent(document.getElementById("but"), "click", clickTip);
+		
+		function clickTip(){
+			alert(tip);
+		}
+	</script>
+	
+</body>
+</html>

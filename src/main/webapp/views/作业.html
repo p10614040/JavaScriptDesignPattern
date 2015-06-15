@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>作业</title>
+	<script type="text/javascript" src="js/jquery.js"></script>
+	
+	<script type="text/javascript">
+	/*
+	 * 通过设计模式修改如下JS代码，构造器、模块、揭示模块均可
+	 * 要求：修改代码结构，建立表单对象，包含【提交】【表单验证】【重置】3个方法
+	 */
+	// 表单提交
+	function sub(){
+		// 获取表单元素的值
+		var name = $('#name').val();
+		var passw = $('#passw').val();
+		var age = $('#age').val();
+		var tel = $('#tel').val();
+		
+		// 表单验证
+		if(!name){
+			alert("姓名不能为空！");
+			$('#name').focus();
+			return false;
+		} else if(!passw){
+			alert("密码不能为空！");
+			$('#passw').focus();
+			return false;
+		} else if(!age){
+			alert("年龄不能为空！");
+			$('#age').focus();
+			return false;
+		} else if(!tel){
+			alert("电话号码不能为空！");
+			$('#tel').focus();
+			return false;
+		}
+		
+		// 显示表单信息
+		$("#message").html("姓名:" + name + "，密码:" + passw + "，年龄:" + age + "，电话号码:" + tel);
+		
+	}
+	
+	// 表单重置
+	function reset(){
+		$("#form").reset();
+	}
+	
+	</script>
+</head>
+<body>
+
+	<form id="form" action="javascript:void(0);">
+		
+		<p><label>姓名*：</label><input type="text" name="name" id="name"></p>
+		<p><label>密码*：</label><input type="text" name="passw" id="passw"></p>
+		<p><label>年龄*：</label><input type="text" name="age" id="age"></p>
+		<p><label>电话*：</label><input type="text" name="tel" id="tel"></p>
+	
+		<button onclick="sub()">提交</button>
+		<button onclick="reset()">重置</button>
+	</form>
+	
+	<h3 id="message"></h3>
+	
+</body>
+</html>
