@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Constructor（构造器）模式</title>
+</head>
+
+<body>
+
+
+	<script>
+		/*
+		 * 二、简单的构造器模式
+		 */
+		function SimplePeople(setName, age, height) {
+			
+			var name = setName;
+			
+			this.SayName = function (){
+				console.log(name);
+			}
+		}
+
+		var tom = new SimplePeople("tom");
+		tom.SayName();
+
+		
+		/*
+		 * 三、带原型（prototype）的构造器模式
+		 */
+		function PrototypePeople(name, age, height) {
+			this.name = name;
+			this.age = age;
+			this.height = height;
+		}
+		// 原型增加一个方法共享
+		PrototypePeople.prototype.toString1 = function() {
+			return "name : " + this.name + ",age : " + this.age + ",height : "
+					+ this.height + ".";
+		}
+		
+		PrototypePeople.toString1();
+	</script>
+
+</body>
+</html>

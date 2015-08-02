@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Revealing Module</title>
+</head>
+<body>
+	<script type="text/javascript">
+	
+	/* 模块模式 */
+	var myModule = function(){
+		var privateVar = "Ban Cherry";
+		
+		function privateFunction(){
+			console.log("Name:" + privateVar);
+		}
+		
+		// 定义公有对象与变量
+		return {
+			name: privateVar,
+			setName: function(strName){
+				privateVar = strName;
+				myModule.getName();		// 访问公有方法必须主对象名称
+			},
+			getName: function(){
+				privateFunction();
+			}
+		}
+	}();
+	
+	myModule.getName();
+	console.log(myModule.name);
+	console.log("打补丁");
+	myModule.name = "Jack";
+	myModule.getName();
+	
+	
+	</script>
+</body>
+</html>

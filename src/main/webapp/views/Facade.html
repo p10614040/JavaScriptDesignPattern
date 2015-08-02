@@ -24,9 +24,9 @@
 			if (el.addEventListener) {
 				el.addEventListener(ev, fn, false);
 				tip = "addEventListener";
-			} else if (el.attachEvent) {
+			} else if (el.attachEvent) {	// IE8
 				el.attachEvent("on" + ev, fn);
-				tip = "attachEvent":
+				tip = "attachEvent";
 			} else {
 				el["on" + ev] = fn;
 				tip = "other";

@@ -14,6 +14,25 @@
 	
 	<script type="text/javascript">
 	
+	var a = {
+		age: 18,
+		name: 'yl'
+	}
+
+	var b = "123";
+	
+	alert(c || a.age);
+	
+	var c;
+	
+	function test(c){
+		alert(c || a.age);
+		if(!c){
+			alert(a.age);
+		}
+	}
+	
+	
 	// 1 简单的汽车购买服务
 	
 	(function (){
@@ -46,6 +65,8 @@
 		CarManager.execute = function (fnName){
 			/* 
 			arguments 是实参，类数组对象
+			slice 从已有的数组中返回选定的元素
+			apply，call 另一个对象调用当前对象的方法，apply参数是数组或实参
 			console.log(arguments);
 			console.log([].slice.call(arguments, 0));
 			console.log(arguments == [].slice.call(arguments, 0)); */
